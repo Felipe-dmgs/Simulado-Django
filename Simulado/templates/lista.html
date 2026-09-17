@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 
-
 {% block conteudo %}
-<h1>Acervo</h1>
+<h1>Acervo da Biblioteca</h1>
+
+<form method="GET" action="{% url 'encontrar_livro' %}">
+    <input type="text" name="nome" value="{{ nome }}" placeholder="Digite o nome do livro...">
+    
+    <select name="tipo">
+        <option value="">Todos os Tipos</option>
+        {% for valor, nome_tipo in tipos %}
+            <option value="{{ valor }}" {% if tipo == valor %}selected{% endif %}>{{ nome_tipo }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Buscar</button>
+</form>
+
 <ul>
-    <form method="GET" action="{% url 'buscar_produtos' %}">
-        <input type="text" name="busca" placeholder="Digite o nome do objeto...">
-        <button type="submit">Buscar</button>
-    </form>
-    {% for livro in livros %}
-        <li>{{ livro.titulo }} — {{ livro.autor }}</li>
+    {% for item in acervos %}
+        <li>
+            <strong>{{ item.tipo }}</strong> - 
+            {% for livro in item.livro.all %}
+                {{ livro.titulo }} — {{ livro.autor }}
+            {% endfor %}
+        </li>
     {% empty %}
-        <li>Nenhum livro cadastrado.</li>
+        <li>Nenhum registo encontrado no acervo.</li>
     {% endfor %}
 </ul>
 {% endblock %}
