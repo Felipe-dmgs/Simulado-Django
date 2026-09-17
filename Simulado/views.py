@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Livro
+from .models import Livro, Acervo
 from .forms import LivroForm
 
 def list_livros(request):
@@ -16,3 +16,33 @@ def novo_livro(request):
     else:
         form = LivroForm()
     return render(request, 'Simulado/form.html', {'form': form})
+
+def encontrar_livro(request):
+    nome = request.GET.get("nome", "").strip()
+    tipo = request.GET.get("tipo", "").strip()
+    categoria = request.GET.get("categoria", "").strip()
+    
+    acervos = Acervo.objects.all().prefetch.related("livro")
+    
+    if nome:
+        acervos = acervos.filter(
+            livro__titulo__icontains = nome
+        )
+    if tipo:
+        acervos = acervos.filter(
+            acervos = acervos.filter(tipo=tipo)
+        )
+    if categoria:
+        acervos = acervos.filter(categoria=categoria)
+        
+    acervos = acervos.distinct()
+    
+    context = {
+        "acervos" = acervos,
+        "tipos" = Acervo.tipo.choices,
+        "categorias" = Acervo.categoria.choices,
+        
+        "nome": nome,
+        "tipo": tipo,
+        "categoria": categoria,
+    }
