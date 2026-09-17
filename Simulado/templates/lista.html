@@ -4,6 +4,10 @@
 {% block conteudo %}
 <h1>Acervo</h1>
 <ul>
+    <form method="GET" action="{% url 'buscar_produtos' %}">
+        <input type="text" name="busca" placeholder="Digite o nome do objeto...">
+        <button type="submit">Buscar</button>
+    </form>
     {% for livro in livros %}
         <li>{{ livro.titulo }} — {{ livro.autor }}</li>
     {% empty %}
