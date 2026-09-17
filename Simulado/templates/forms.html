@@ -1,5 +1,16 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<h1>Novo Livro</h1>
+
 <form method="post">
     {% csrf_token %}
+    <h3>Dados do Livro</h3>
     {{ form.as_p }}
-    <button>Salvar</button>
+
+    <h3>Dados do Acervo</h3>
+    {{ acervo_form.as_p }}
+
+    <button type="submit">Salvar</button>
 </form>
+{% endblock %}

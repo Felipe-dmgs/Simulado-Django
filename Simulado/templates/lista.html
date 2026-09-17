@@ -13,13 +13,22 @@
         {% endfor %}
     </select>
 
+    <select name="categoria">
+        <option value="">Todas as Categorias</option>
+        {% for valor, nome_categoria in categorias %}
+            <option value="{{ valor }}" {% if categoria == valor|stringformat:"s" %}selected{% endif %}>{{ nome_categoria }}</option>
+        {% endfor %}
+    </select>
+
     <button type="submit">Buscar</button>
 </form>
+
+<p><a href="{% url 'novo_livro' %}">+ Adicionar novo livro</a></p>
 
 <ul>
     {% for item in acervos %}
         <li>
-            <strong>{{ item.tipo }}</strong> - 
+            <strong>{{ item.tipo }}</strong> - {{ item.get_categoria_display }} -
             {% for livro in item.livro.all %}
                 {{ livro.titulo }} — {{ livro.autor }}
             {% endfor %}
